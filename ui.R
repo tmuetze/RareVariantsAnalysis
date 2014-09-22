@@ -1,21 +1,18 @@
-vcfOr <- read.table("EVS_variant_download_GeneName_HNF4A.vcf", skip=36)
-names(vcfOr) <- c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
-vcf<-vcfOr[,1:5]
-
 library(shiny)
 library(graphics)
 require(rCharts)
-require(rCharts)
-shinyUI(pageWithSidebar(
-    headerPanel("Rare Variant Analysis"),
-    
-    sidebarPanel(
-        h4("Chromosome 20, Gene HNF4A"),
-        h5("The chart displays the reference base on the y axis and the position on the chromosom on the x axis. The dots are colored by base of the rare variant (two or more bases correspond to an insertion)."),
-        h6("Please scroll to the side to see the entire chart.")
-        
-    ),
+#reading in the Excel file instead of the vcf
+library(xlsx)
+
+shinyUI(
     mainPanel(
-        showOutput("myChart", "polycharts")
-    )
-))
+        h1("Rare Variant Analysis"),
+        h4("Option 1 (Without user input) : The first chart is the same as before except for a change in layout and design."),
+        showOutput("myChart1", "polycharts"),
+        h4("Option 2 (With user input): As we would like to allow for user input, I added an upload field. Once the user selects a formated vcf file in Excel format (e.g. the one Vikas sent me), the preprocessed vcf file is ploted."),
+        fileInput('file1', 'Choose Excel file/Please choose the excel file from https://github.com/tmuetze/RareVariantsAnalysis',
+                  accept='.xls'),
+        showOutput("myChart2", "polycharts"),
+        h4("The second plot is only shown if a file is selected.")
+        )
+)
